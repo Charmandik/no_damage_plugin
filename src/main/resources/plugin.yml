@@ -4,6 +4,6 @@ main: minecraftplugin.nodamage.NoDamage
 commands:
   basic:
     description: This is a demo command.
-    usage: /<command> [player]
+    usage: /basic
     permission: <NoDamage>.basic
-    permission-message: You don't have <permission>
+    permission-message: You don't have

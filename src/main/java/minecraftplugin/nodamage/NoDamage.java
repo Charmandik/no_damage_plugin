@@ -1,7 +1,5 @@
 package minecraftplugin.nodamage;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Vector;
@@ -20,9 +18,5 @@ public final class NoDamage extends JavaPlugin {
     @Override
     public void onDisable() {
     }
-
-
-
-
 }
 

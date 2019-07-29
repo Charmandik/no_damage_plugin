@@ -7,22 +7,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Vector;
 
 
 public class EventListener implements Listener {
 
-    HashMap<String, Long> playerList = new HashMap<>();
+    private HashMap<String, Long> newPlayers = new HashMap<>();
+    private Vector<String> oldPlayers = new Vector<>();
+    private final static String FILENAME = "oldPlayers.txt";
 
     public EventListener() {
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (!playerList.containsKey(event.getPlayer().getName())) {
+        if(!oldPlayers.contains(event.getPlayer().getName()))
+        if (!newPlayers.containsKey(event.getPlayer().getName())) {
             Date date = new Date();
-            playerList.put(event.getPlayer().getName(), date.getTime());
+            newPlayers.put(event.getPlayer().getName(), date.getTime());
         }
     }
 
@@ -32,12 +39,27 @@ public class EventListener implements Listener {
         Date currentTime = new Date();
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            if (playerList.containsKey(player.getName())) {
-                if (currentTime.getTime() - playerList.get(player.getName()) < 600000) {
+            if(!oldPlayers.contains(player.getName()))
+            if (newPlayers.containsKey(player.getName())) {
+                if (currentTime.getTime() - newPlayers.get(player.getName()) < 600000) {
                     event.setCancelled(true);
                     event.setDamage(0);
                 }
+                else {
+                    oldPlayers.add(player.getName());
+                    addPlayerToFile();
+                }
             }
+        }
+    }
+    private void addPlayerToFile()
+    {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME));
+            writer.write(oldPlayers.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
