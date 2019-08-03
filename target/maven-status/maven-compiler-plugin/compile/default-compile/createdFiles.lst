@@ -1,3 +1,4 @@
 minecraftplugin\nodamage\CommandListener.class
 minecraftplugin\nodamage\EventListener.class
+minecraftplugin\nodamage\GlobalVar.class
 minecraftplugin\nodamage\NoDamage.class

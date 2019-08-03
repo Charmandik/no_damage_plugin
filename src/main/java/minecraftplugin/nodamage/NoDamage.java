@@ -12,7 +12,7 @@ public final class NoDamage extends JavaPlugin {
     public void onEnable() {
         getLogger().info("Your plugin has been enabled!");
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
-        this.getCommand("basic").setExecutor(new CommandListener());
+        this.getCommand("settimeout").setExecutor(new CommandListener());
     }
 
     @Override

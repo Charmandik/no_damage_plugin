@@ -6,20 +6,36 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+
+import static org.bukkit.Bukkit.getServer;
 
 
 public class EventListener implements Listener {
 
     private HashMap<String, Long> newPlayers = new HashMap<>();
-    private Vector<String> oldPlayers = new Vector<>();
+    private Vector<String> oldPlayers;
     private final static String FILENAME = "oldPlayers.txt";
+    {
+        try {
+            oldPlayers = initOldPlayersVector();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public EventListener() {
     }
@@ -41,7 +57,7 @@ public class EventListener implements Listener {
             Player player = (Player) entity;
             if(!oldPlayers.contains(player.getName()))
             if (newPlayers.containsKey(player.getName())) {
-                if (currentTime.getTime() - newPlayers.get(player.getName()) < 600000) {
+                if (currentTime.getTime() - newPlayers.get(player.getName()) < GlobalVar.INSTANCE.getTimeout()) {
                     event.setCancelled(true);
                     event.setDamage(0);
                 }
@@ -52,6 +68,7 @@ public class EventListener implements Listener {
             }
         }
     }
+
     private void addPlayerToFile()
     {
         try {
@@ -62,4 +79,15 @@ public class EventListener implements Listener {
             e.printStackTrace();
         }
     }
+
+    public Vector<String> initOldPlayersVector()throws Exception
+    {
+        String data = new String(Files.readAllBytes(Paths.get(FILENAME)));
+        String[] dataArray = data.split(" ");
+        return new Vector<>(Arrays.asList(dataArray));
+    }
+
+
+
+
 }
