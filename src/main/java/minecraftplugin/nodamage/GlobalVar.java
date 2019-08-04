@@ -14,7 +14,7 @@ public class GlobalVar {
     }
 
     public void setTimeout(String timeout) {
-        this.timeout = Long.parseLong(timeout);
+        this.timeout = Long.parseLong(timeout) * 1000;
     }
 }
 
